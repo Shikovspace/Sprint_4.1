@@ -20,16 +20,13 @@ public class ImportantQuestionsParametrizedTest {
     private WebDriver driver;
 
     // Элемент выпадающего списка - вопрос и ответ
-    private final By importantQuestionLocator;
-    private final By importantAnswerLocator;
+    private final int number;
     private final String questionExpectedText;
     private final String questionExpectedAnswer;
 
     //Конструктор
-    public ImportantQuestionsParametrizedTest(By importantQuestionLocator, By importantAnswerLocator,
-                                    String questionText, String questionAnswer) {
-        this.importantQuestionLocator = importantQuestionLocator;
-        this.importantAnswerLocator = importantAnswerLocator;
+    public ImportantQuestionsParametrizedTest(Integer number, String questionText, String questionAnswer) {
+        this.number = number;
         this.questionExpectedText = questionText;
         this.questionExpectedAnswer = questionAnswer;
     }
@@ -37,14 +34,20 @@ public class ImportantQuestionsParametrizedTest {
     @Parameterized.Parameters
     public static Object[][] getQuestions() {
         return new Object[][] {
-                {QUESTION1, ANSWER1, TEXT_QUESTION1, TEXT_ANSWER1},
-                {QUESTION2, ANSWER2, TEXT_QUESTION2, TEXT_ANSWER2},
-                {QUESTION3, ANSWER3, TEXT_QUESTION3, TEXT_ANSWER3},
-                {QUESTION4, ANSWER4, TEXT_QUESTION4, TEXT_ANSWER4},
-                {QUESTION5, ANSWER5, TEXT_QUESTION5, TEXT_ANSWER5},
-                {QUESTION6, ANSWER6, TEXT_QUESTION6, TEXT_ANSWER6},
-                {QUESTION7, ANSWER7, TEXT_QUESTION7, TEXT_ANSWER7},
-                {QUESTION8, ANSWER8, TEXT_QUESTION8, TEXT_ANSWER8},
+                {0, "Сколько это стоит? И как оплатить?", "Сутки — 400 рублей. Оплата курьеру — наличными или картой."},
+                {1, "Хочу сразу несколько самокатов! Так можно?", "Пока что у нас так: один заказ — один самокат. Если хотите " +
+                        "покататься с друзьями, можете просто сделать несколько заказов — один за другим."},
+                {2, "Как рассчитывается время аренды?", "Допустим, вы оформляете заказ на 8 мая. Мы привозим самокат 8 " +
+                        "мая в течение дня. Отсчёт времени аренды начинается с момента, когда вы оплатите заказ курьеру. " +
+                        "Если мы привезли самокат 8 мая в 20:30, суточная аренда закончится 9 мая в 20:30."},
+                {3, "Можно ли заказать самокат прямо на сегодня?", "Только начиная с завтрашнего дня. Но скоро станем расторопнее."},
+                {4, "Можно ли продлить заказ или вернуть самокат раньше?", "Пока что нет! Но если что-то срочное — всегда можно позвонить в " +
+                        "поддержку по красивому номеру 1010."},
+                {5, "Вы привозите зарядку вместе с самокатом?", "Самокат приезжает к вам с полной зарядкой. Этого хватает " +
+                        "на восемь суток — даже если будете кататься без передышек и во сне. Зарядка не понадобится."},
+                {6, "Можно ли отменить заказ?", "Да, пока самокат не привезли. Штрафа не будет, объяснительной " +
+                        "записки тоже не попросим. Все же свои."},
+                {7, "Я живу за МКАДом, привезёте?", "Да, обязательно. Всем самокатов! И Москве, и Московской области."},
         };
     }
 
@@ -53,9 +56,9 @@ public class ImportantQuestionsParametrizedTest {
     public void shouldCheckQuestionAndAnswer() throws InterruptedException {
         MainScooterQuestionsPage questionsPage = new MainScooterQuestionsPage(driver);
 
-        String questionActualText = questionsPage.getQuestionActualText(importantQuestionLocator);
-        questionsPage.clickQuestion(importantQuestionLocator);
-        String answerActualText = questionsPage.getAnswerActualText(importantAnswerLocator);
+        String questionActualText = questionsPage.getQuestionActualText(By.id("accordion__heading-" + number));
+        questionsPage.clickQuestion(By.id("accordion__heading-" + number));
+        String answerActualText = questionsPage.getAnswerActualText(By.id("accordion__panel-" + number));
 
         // Проверить соответствие текста вопроса и ответа ожидаемым значениям
         Assert.assertEquals("Текст вопроса не соответствует ожидаемому: ", questionExpectedText, questionActualText);
