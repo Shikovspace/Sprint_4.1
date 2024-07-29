@@ -77,7 +77,7 @@ public class OrderScooterParametrizedTest {
         // драйвер для браузера
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
-        //driver = new ChromeDriver(options);
+        // driver = new ChromeDriver(options);
         driver = new FirefoxDriver();
 
         // переход на страницу тестового приложения
